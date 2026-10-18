@@ -33,10 +33,10 @@ provider = "giscus"
 #   2. add a "Comments" category (not Announcements)
 #   3. install the giscus app: https://github.com/apps/giscus
 #   4. open https://giscus.app and paste the two generated ids below.
-giscus_repo = "asukhov/test"
-giscus_repo_id = ""
+giscus_repo = "asukhov/parttime"
+giscus_repo_id = "R_kgDOVOnK-Q"
 giscus_category = "Comments"
-giscus_category_id = ""
+giscus_category_id = "DIC_kwDOVOnK-c4DI565"
 giscus_theme = "light"
 giscus_reactions = true
 

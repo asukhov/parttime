@@ -18,7 +18,7 @@
  * Secrets/vars (see README.md next to this file):
  *   GH_TOKEN            fine-grained PAT, Discussions: Read and write
  *   TURNSTILE_SECRET    Turnstile secret key (optional but recommended)
- *   GH_OWNER, GH_REPO   e.g. "asukhov", "test"
+ *   GH_OWNER, GH_REPO   e.g. "asukhov", "parttime"
  *   GH_CATEGORY_ID      discussions category id (e.g. "Comments")
  *   ALLOWED_ORIGIN      comma separated origins, or "*"
  *   RATE_LIMIT          KV namespace binding (optional)
