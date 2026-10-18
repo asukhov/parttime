@@ -72,6 +72,74 @@ def rewrite_internal_links(fragment: str, resolve) -> str:
     return INTERNAL_LINK_RE.sub(repl, fragment)
 
 
+# /static/... inside imported post bodies is a site-root placeholder: the
+# builder rewrites it to a document-relative path for the page being rendered.
+BODY_STATIC_RE = re.compile(r"""(?<=["'(\s,])/static/""")
+BODY_TOKEN_RE = re.compile(r"<a\b[^>]*>|</a>|<img\b[^>]*>", re.I)
+IMG_SRC_RE = re.compile(r'\bsrc="([^"]*)"', re.I)
+ANCHOR_HREF_RE = re.compile(r'\bhref="([^"]*)"', re.I)
+ATTR_TARGET_RE = re.compile(r'\s+target="[^"]*"', re.I)
+ATTR_REL_RE = re.compile(r'\s+rel="[^"]*"', re.I)
+BLANK_RE = re.compile(r"(?:&nbsp;|&#160;|\xa0|\s)*")
+CLOSE_ANCHOR_RE = re.compile(r"(?:&nbsp;|&#160;|\xa0|\s)*</a>", re.I)
+IMAGE_URL_RE = re.compile(
+    r"\.(?:png|jpe?g|gif|webp|svgz?|avif|bmp|tiff?)(?:[?#].*)?$", re.I)
+
+
+def is_image_url(url: str) -> bool:
+    return bool(url) and ("/static/" in url or IMAGE_URL_RE.search(url) is not None)
+
+
+def linkify_images(fragment: str) -> str:
+    """Make images clickable: a bare image gets wrapped in a link to itself;
+    an image that is already a link target keeps that target (the full-size
+    copy). Either way the link opens in a new tab."""
+    out: list[str] = []
+    pos = 0
+    anchor_at = None   # index of the still-open <a ...> token in `out`
+    clean = False      # only whitespace between that <a ...> and the next tag
+
+    for m in BODY_TOKEN_RE.finditer(fragment):
+        gap = fragment[pos:m.start()]
+        if BLANK_RE.fullmatch(gap) is None:
+            clean = False
+        out.append(gap)
+        token = m.group(0)
+        low = token.lower()
+
+        if low.startswith("<a"):
+            anchor_at = len(out)
+            out.append(token)
+            clean = True
+        elif low == "</a>":
+            out.append(token)
+            anchor_at = None
+            clean = False
+        else:  # <img ...>
+            src_m = IMG_SRC_RE.search(token)
+            src = src_m.group(1) if src_m else ""
+            if anchor_at is None:
+                if src:
+                    out.append(
+                        f'<a href="{src}" target="_blank" rel="noopener">{token}</a>')
+                else:
+                    out.append(token)
+            else:
+                if clean and CLOSE_ANCHOR_RE.match(fragment, m.end()):
+                    tag = out[anchor_at]
+                    href_m = ANCHOR_HREF_RE.search(tag)
+                    if href_m and is_image_url(href_m.group(1)):
+                        tag = ATTR_TARGET_RE.sub("", tag)
+                        tag = ATTR_REL_RE.sub("", tag)
+                        out[anchor_at] = (
+                            tag[:-1] + ' target="_blank" rel="noopener">')
+                out.append(token)
+        pos = m.end()
+
+    out.append(fragment[pos:])
+    return "".join(out)
+
+
 class TS:
     """Tiny template: replaces {{ key }} with values. Unknown keys are fatal."""
 
@@ -272,6 +340,20 @@ class Builder:
         post = self.legacy_map.get(key)
         return self.href(post.url_path) if post else ""
 
+    def resolve_static_assets(self, fragment: str) -> str:
+        """Make /static/... asset references document-relative for the page
+        currently in context."""
+        return BODY_STATIC_RE.sub(lambda m: self.prefix + "static/", fragment)
+
+    def prepare_body(self, fragment: str) -> str:
+        """Render a post/page body for the page currently in context: old
+        absolute links resolved to their imported counterparts, /static/
+        assets made document-relative, images made clickable (a click opens
+        the image — full size when one is linked — in a new tab)."""
+        fragment = rewrite_internal_links(fragment, self.resolve_legacy)
+        fragment = self.resolve_static_assets(fragment)
+        return linkify_images(fragment)
+
     # -- loading --------------------------------------------------------------
 
     def load_content(self) -> None:
@@ -462,7 +544,7 @@ class Builder:
     def post_card(self, post: Post, *, comments_link: bool) -> str:
         title = e(post.title)
         url = e(self.href(post.url_path))
-        body = rewrite_internal_links(post.body_html, self.resolve_legacy)
+        body = self.prepare_body(post.body_html)
         comments = ""
         if comments_link:
             label = "comments"
@@ -539,7 +621,7 @@ class Builder:
             self.set_ctx(page.url_path)
             body = (
                 f'<article class="page"><h2 class="page-title">{e(page.title)}</h2>'
-                f'<div class="post-body">{page.body_html}</div></article>'
+                f'<div class="post-body">{self.prepare_body(page.body_html)}</div></article>'
             )
             self.write(page.url_path, self.layout(
                 title=page.title,
@@ -628,7 +710,7 @@ class Builder:
                 continue
             pub = email.utils.format_datetime(p.date)
             link = self.href(p.url_path)  # relative to /feed.xml
-            body = rewrite_internal_links(p.body_html, self.resolve_legacy)
+            body = self.prepare_body(p.body_html)
             body = body.replace("]]>", "]]&gt;")
             items.append(
                 "<item>"
