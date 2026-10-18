@@ -1,0 +1,26 @@
+# Deployment config for the anonymous-comments bridge.
+# Docs: https://developers.cloudflare.com/workers/wrangler/configuration/
+
+name = "parttime-monster-comments"
+main = "worker.js"
+compatibility_date = "2026-06-01"
+
+[vars]
+GH_OWNER = "asukhov"
+GH_REPO = "test"
+# Discussions category id — see README.md, step 3
+GH_CATEGORY_ID = ""
+# Origins allowed to write comments (the blog itself + local preview).
+# "*" disables the check (not recommended for the write endpoint).
+ALLOWED_ORIGIN = "https://asukhov.github.io,http://localhost:8000"
+
+# Rate limiting (1 comment/minute/IP). Create with:
+#   npx wrangler kv namespace create RATE_LIMIT
+# then paste the id below and uncomment.
+# [[kv_namespaces]]
+# binding = "RATE_LIMIT"
+# id = ""
+
+# Secrets are set via `npx wrangler secret put`, never stored in this file:
+#   GH_TOKEN           fine-grained PAT (Discussions: Read and write)
+#   TURNSTILE_SECRET   Turnstile secret key

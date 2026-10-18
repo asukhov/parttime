@@ -1,0 +1,28 @@
+---
+title: "Пусть тут повисит"
+date: 2011-04-23T23:12:00.001+04:00
+slug: 2011-04-blog-post
+legacy: "https://salttype.blogspot.com/2011/04/blog-post.html"
+comments_count: 0
+---
+
+<blockquote>aaa authentication dot1x default group radius none<br />
+dot1x system-auth-control<br />
+!<br />
+interface FastEthernet0/X<br />
+switchport mode access<br />
+dot1x port-control auto<br />
+dot1x guest-vlan XXX<br />
+spanning-tree portfast<br />
+!<br />
+radius-server host XXX.XXX.XXX.XXX auth-port 1812 acct-port 1813 key KEY<br />
+<br />
+On the RADIUS-server (aka NAP) it is necessary to define following attributes for users:<br />
+<br />
+Tunnel-Type [64] = VLAN<br />
+Tunnel-Medium-Type [65] = 802<br />
+Tunnel-Private-Group-Id [81] = NAME_OF_VLAN<br />
+<br />
+When you configure Microsoft NAP, there is a problem with the client part of the product. In general, Microsoft NAP works on operating systems starting with Microsoft Windows XP SP3 and higher. In Windows XP SP3 has everything you need to work with NAP, except the graphical console to configure NAP functions. This console, by and large, is not necessary in a corporate network -- as all settings for the client computers are distributed centrally through Group Policy. <br />
+<br />
+So, for the correct operation of NAP requires that client computers will automatically run <b>NAP Agent</b> service -- by default this service is disabled. Turn it on and others necessary for the NAP services through group policy is not difficult. However, if suddenly at customisation of a group policy, you accidentally or intentionally clicked on the <b>Edit Security</b> button, on Windows XP SP3 this operation will call failure at automatic start of NAP Agent service.</blockquote>

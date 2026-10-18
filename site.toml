@@ -1,0 +1,89 @@
+# Parttime Monster — site configuration
+# Everything the generator needs lives here.
+
+[site]
+title = "Parttime Monster"
+description = "Личные заметки — цитаты, наблюдения, мысли."
+# Optional: full public URL, no trailing slash. Leave empty and the site is
+# completely domain-agnostic — all links are relative, and canonical/og:url
+# plus sitemap.xml are skipped. Set it (e.g. after moving to a custom domain)
+# and they come back.
+url = ""
+lang = "ru"
+author = "Alexandr Sukhov"
+copyright_since = 2009
+posts_per_page = 50
+
+[build]
+# Where to write the generated site.
+output = "site"
+
+[comments]
+# "giscus" — comments live as GitHub Discussions on this repository (default;
+#            recommended — see README → Comments for the one-time setup)
+# "cf"     — anonymous comments via the bundled Cloudflare Worker bridge
+#            (extras/cloudflare-comments/). It uses the same discussion
+#            threads, so you can start with giscus and switch when ready.
+# "none"   — no comments
+provider = "giscus"
+
+# --- giscus (provider = "giscus") ---------------------------------------------
+# Setup once (see README → Comments):
+#   1. make the repo public and enable Discussions
+#   2. add a "Comments" category (not Announcements)
+#   3. install the giscus app: https://github.com/apps/giscus
+#   4. open https://giscus.app and paste the two generated ids below.
+giscus_repo = "asukhov/test"
+giscus_repo_id = ""
+giscus_category = "Comments"
+giscus_category_id = ""
+giscus_theme = "light"
+giscus_reactions = true
+
+# --- Cloudflare Worker bridge (provider = "cf") --------------------------------
+# Deploy extras/cloudflare-comments/ and put the worker URL + Turnstile site key here.
+cf_api = ""
+cf_turnstile_sitekey = ""
+
+[search]
+enabled = true
+
+[feed]
+# How many posts go into feed.xml
+size = 25
+
+[[sidebar.links]]
+label = "about"
+href = "/posts/wellcome/"
+
+[[sidebar.links]]
+label = "library"
+href = "/posts/2010-01-blog-post_12/"
+
+[[sidebar.links]]
+label = "video spot"
+href = "/posts/2013-03-blog-post/"
+
+[[sidebar.links]]
+label = "parallax"
+href = "/posts/2016-05-blog-post_9/"
+
+[[sidebar.links]]
+label = "виночерпий"
+href = "/posts/blog-post_81/"
+
+[[sidebar.links]]
+label = "search"
+href = "/search/"
+
+[[sidebar.links]]
+label = "archives"
+href = "/archive/"
+
+[[sidebar.links]]
+label = "rss"
+href = "/feed.xml"
+
+[[sidebar.links]]
+label = "mail"
+href = "mailto:asukhov@somewereinthespace.com"

@@ -1,0 +1,30 @@
+---
+title: "ADFS Rule to control access to Office365 by POP3, IMAP, RPC"
+date: 2014-03-08T17:44:00.000+04:00
+slug: adfs-rule-to-control-access-to
+legacy: "https://salttype.blogspot.com/2014/03/adfs-rule-to-control-access-to.html"
+comments_count: 0
+---
+
+Столкнулся с проблемой -- необходимо было сделать правило для ADFS разрешающее внешние подключения по ActiveSync, OWA (с двухфакторной аутентификацией), Lync (толстый клиент). И, соответственно, запретить из вне толстого клиента Outlook, в том числе и с Маков, в том числе по POP3/IMAP/SMTP.<br />
+<br />
+Собственно вот оно -- правило -- пусть здесь повисит.<br />
+<br />
+<blockquote class="tr_bq">
+ADFS Rule to control access to Office365 -- allow ActiveSync, Lync (full client too), OWA. Deny Outlook full client (IMAP, POP3, SMTP, Exchange RPC).</blockquote>
+<br />
+ms-forwarded-client-ip -- public NAT -- in this case two DMZ networks AAA.BBB.CCC.0/24 and DDD.EEE.FFF.0/24<br />
+<br />
+<div style="text-align: left;">
+<blockquote class="tr_bq">
+NOT exists([Type == "http://schemas.microsoft.com/2012/01/requestcontext/claims/x-ms-forwarded-client-ip", Value =~ "\bAAA\.BBB\.CCC\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-5][0-9])\b|\bDDD\.EEE\.FFF\.([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-5][0-9])\b"])<br />
+&amp;&amp; exists([Type == "http://schemas.microsoft.com/2012/01/requestcontext/claims/x-ms-client-application", Value =~ "Microsoft.Exchange.RPC|Microsoft.Exchange.WebServices| Microsoft.Exchange.PopImap|Microsoft.Exchange.SMTP"])<br />
+=&gt; issue(Type = "http://schemas.microsoft.com/authorization/claims/deny", Value = "false"); </blockquote>
+</div>
+<br />
+Для проверки RegExp я использовал <u><a href="http://www.softlion.com/webTools/RegExpTest/default.aspx" target="_blank">RegEx tester </a></u><br />
+<br />
+В зависимости от приложения значения x-ms-client-application могут быть следующие:<br />
+<br />
+<blockquote class="tr_bq">
+Microsoft.Exchange.ActiveSync<br />Microsoft.Exchange.Autodiscover<br />Microsoft.Exchange.OfflineAddressBook<br />Microsoft.Exchange.RPC<br />Microsoft.Exchange.WebServices<br />Microsoft.Exchange.Powershell<br />Microsoft.Exchange.SMTP<br />Microsoft.Exchange.PopImap<br /><u><a href="http://www.softlion.com/webTools/RegExpTest/default.aspx" target="_blank"> </a></u></blockquote>

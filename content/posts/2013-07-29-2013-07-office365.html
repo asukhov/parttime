@@ -1,0 +1,20 @@
+---
+title: "Про двухфакторную аутентификацию в Office365"
+date: 2013-07-29T19:39:00.000+04:00
+slug: 2013-07-office365
+legacy: "https://salttype.blogspot.com/2013/07/office365.html"
+comments_count: 0
+---
+
+Имеется подписка на Office365. Для доступа внешних клиентов используется ADFS Proxy (2.0 на Windows 2012). Задача -- прикрутить двухфакторную аутентификацию для подключения к облаку. Например с использованием смарт-карт (eToken, ruToken).<br />
+<br />
+На ADFS Proxy в %SystemDrive%\inetpub\adfs\ls\web.config есть следующие строки:<br />
+<br />
+<blockquote class="tr_bq">
+&lt;localAuthenticationTypes&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &lt;add name="Forms" page="FormsSignIn.aspx" /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &lt;add name="TlsClient" page="auth/sslclient/" /&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <br />
+&nbsp;&nbsp;&nbsp;&nbsp; &lt;add name="Basic" page="auth/basic/" /&gt;<br />
+&lt;/localAuthenticationTypes&gt;</blockquote>
+<br />
+Необходимо на первое место выставить тип <b>TlsClient</b> -- что позволит задействовать сертификаты -- в том числе и смарт-карты.<br />

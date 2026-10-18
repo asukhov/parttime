@@ -1,0 +1,49 @@
+---
+title: "Проблемы при настройке SCCM 2007"
+date: 2010-02-28T19:06:00.004+03:00
+slug: sccm-2007
+legacy: "https://salttype.blogspot.com/2010/02/sccm-2007.html"
+comments_count: 0
+---
+
+Не так давно начал заниматься внедрением продукта компании Microsoft -- System Center Configuration Manager 2007 SP2 (SCCM 2007). SCCM -- это очень мощное средство централизованного развертывания различных программных средств (в том числе и операционных систем), а также средство сбора статистики и построения различных отчетов. Более подробный обзор возможностей можно найти на сайте корпорации Microsoft. Здесь же я постараюсь описать проблемы с которыми я столкнулся во время установки\настройки SCCM и пути их решения. <br />
+<br />
+<a name='more'></a><br />
+<br />
+Одним из важнейших пунктов перед установкой и настройкой SCCM является планирование инфраструктуры. Необходимо четко понимать, какую инфраструктуру вы хотите построить и для чего. Сколько данная инфраструктура будет обслуживать клиентов и какие роли будут выполнять конкретные сервера. Планирование инфраструктуры -- 50 % всей работы.<br />
+<br />
+В моем случае необходимо было развернуть мультисайтовую структуру. В мультисайтовой структуре могут быть как Primary (с собственной базой данных) так и Secondary (без базы данных) сайты. Иерархически сайты подразделяются на родительские и дочерние. Дочерний сайт может быть как Primary так и Secondary. <br />
+В моем случае подключение к базе данных MSSQL имеет только Primary Site. MSSQL сервер располагается на отдельном сервере и подключен к Primary сайту по высокоскоростному каналу. <br />
+<br />
+<b>Случай 1</b>. Primary Site помимо всего прочего должен выполнять функции Software Update Point (SUP) и Software Distribution Point (DP). В существующей инфраструктуре уже был развернут сервер WSUS, который ежедневно выполнял синхронизацию с серверами Microsoft. Поэтому было решено попробовать связать основной сервер SCCM с данным сервером. После установки пакета WSUS, чей функционал используется ролью SUP, была произведена успешная (но очень долгая -- порядка 5 часов) синхронизация серверов WSUS и SUP. Однако после создания первого Листа Обновлений и Пакета Развертывания выяснилось, что не смотря на то, что синхронизация производилась с сервера WSUS и данный сервер установлен основным, главный сервер сайта SCCM (с установленной ролью SUP) пытается скачивать обновления не с сервера WSUS, а напрямую с серверов Microsoft. Т.е. основному серверу Primary Site с установленной ролью SUP необходим прямой доступ до Microsoft для скачивания обновлений.<br />
+<br />
+<b>Случай 2</b>. Еще одна проблема возникла в процессе установки основного сервера SCCM -- появлялась ошибка при попытке установить роль Managment Point (MP). Несомненным достоинством SCCM является большое количество различного рода журналов событий (логов), в которых можно всегда найти подробную информацию об ошибках и стадиях их возникновения. В данном случае ошибка была вызвана неправильными настройками WebDAV. Для Default Site (в IIS) необходимо сделать следующее:<br />
+<br />
+Добавить Authoring rules:<br />
+<ul><li>Allow access to: All content</li>
+<li>Allow access to this content to: All user</li>
+<li>Permissions: Read</li>
+</ul>WebDAV Setting\Property Behavior:<br />
+<ul><li>Allow Anonymous Property Queries: TRUE</li>
+<li>Allow Custom Properties: FALSE</li>
+<li>Allow Property Queries with Infinite Depth: TRUE</li>
+</ul>WebDAV Setting\WebDAV Behavior:<br />
+<ul><li>Allow Hidden Files to be Listed: TRUE</li>
+</ul><b>Случай 3</b>. Во время установки и настройки возможны проблемы из-за отсутствия разрешений у учетной записи сервера SCCM на внесение изменений в каталог System\System Managment (CN=System Management,CN=System,DC=YOUR_DOMAIN) Active Directory.<br />
+<br />
+Необходимо также добавить учетную запись основного сервера SCCM в группу Локальных Администраторов сервера MSSQL, если данный сервер располагается отдельно.<br />
+<br />
+<b>Случай 4</b>. Для отображения русских букв в именах Подразделений (OU), различных групп безопасности и отчетах необходимо сделать следующее:<br />
+<ul><li>в качестве System Locale (language for non-Unicode programs) необходимо выбрать Russian;</li>
+<li>добавить ключ запуска консоли <b>/sms:providerlocale=0419</b></li>
+<li>В реестре изменить  HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Nls\CodePage для 1252 на с_1251.nlc (для корректного отображения русского шрифта в отчетах).</li>
+</ul><b>Случай 5</b>. После настройки обнаружения клиентских компьютеров в Active Directory (AD) в журналах начали появляться ошибки типа SMS_Discovery_Data_Manager Error ID 620. Анализ log-файлов показал, что данные ошибки вызваны русским netbios-именем одной учетной записи компьютера. Которая, надо отметить, тут же была из AD удалена ;) <br />
+<br />
+<b>Случай 6</b>. При создании Secondary Site могут возникнуть проблемы с обменом сообщениями между Primary и Secondary сайтами. Ошибку можно найти в логе despool.log. Для решения проблемы необходимо вручную сгенерировать ключи -- при помощи утилиты <b>Preinst.exe</b>. Найти данную утилиту можно в папке \\SMS_<sitecode>\bin\i386\<language code>. Ключи генерируются следующим образом:<br />
+<ul><li>Preinst /keyforparent -- после выполнения команды необходимо переместить файл <site code>.CT4 в папку <install directory>\inboxes\hman.box Primary сайта;</li>
+<li>Preinst /keyforchild -- после выполнения команды необходимо переместить файл <site code>.CT5 в папку <install directory>\inboxes\hman.box Secondary сайта.</li>
+</ul>В заключении несколько полезных ссылок по теме:<br />
+<ul><li><span class="underline"><a href='http://msevents.microsoft.com/cui/SearchDisplay.aspx?culture=en-US#culture=en-US;eventType=4;sortKey=;sortOrder=;pageEvent=false;hdnInitialCount=;searchcontrol=yes;kwdAny=System%20Center%20Configuration%20Manager'>Virtual Labs on TechNet</a></span>;</li>
+<li><span class="underline"><a href='http://communities.intel.com/community/openportit/vproexpert/microsoft-vpro/blog/2008/10/24/microsoft-sccm-2007-sp1-intel-vpro-training-videos-now-available'> Microsoft SCCM 2007 SP1 Intel vPro Training Videos</a></span>;</li>
+<li><span class="underline"><a href='http://technet.microsoft.com/en-us/library/bb680651.aspx'>Configuration Manager Documentation Library on TechNet</a></span></li>
+</ul>

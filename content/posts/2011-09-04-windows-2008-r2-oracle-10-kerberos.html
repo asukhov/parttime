@@ -1,0 +1,30 @@
+---
+title: "Windows 2008 R2 + Oracle 10 + Kerberos"
+date: 2011-09-04T15:14:00.000+04:00
+slug: windows-2008-r2-oracle-10-kerberos
+legacy: "https://salttype.blogspot.com/2011/09/windows-2008-r2-oracle-10-kerberos.html"
+comments_count: 0
+---
+
+Существует проблема при попытке аутентификации пользователя для получения доступа к Oracl-овым базам (посредством какого-либо софта) используя домен-контроллеры на Windows 2008 R2. Аутентификация идет по протоколу Kerberos. Базы на Oracl-е, Oracle на Unix-like системе.<br />
+<br />
+Есть мнение, что это проблема больших организаций в которых съехать с 10 Oracl-а на более новую версию не так просто.<br />
+<br />
+Проблема выражается в том, что клиенту не удается получить тикет для сервера с Oracl-ом. Сервер имеет отдельную учетку в AD со своим SPN-ом. В ответ на запрос тикета, клиент получает KDC_ERR_ETYPE_NOSUPP.
+
+На домен-контроллере и клиентах включена поддержка DES-CBC-MD5 и DES-CBC-CRC.
+
+Проблема решается добавлением ключей:
+
+<br />
+<br />
+<blockquote>
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa\Kerberos\ Parameters\AllowTgtSessionKey REG_DWORD 0x00000001(1)</blockquote>
+<br />
+<blockquote>
+
+
+HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\ kdc\KdcUseRequestedEtypesForTickets REG_DWORD 0x00000001(1)
+</blockquote>
+<br />
+Второй ключ может заафектит сервера на Windows 2003. Необходимо применять с осторожностью.

@@ -1,0 +1,34 @@
+---
+title: "MAB + NAP on NPS"
+date: 2010-12-18T12:05:00.000+03:00
+slug: mab-nap-on-nps
+legacy: "https://salttype.blogspot.com/2010/12/mab-nap-on-nps.html"
+comments_count: 0
+---
+
+Для повышения секурности в дополнение к используемому NAP'у было решено для отдельных классов Non NAP-Capable устройств (читай принтеров) использовать механизм MAB -- MAC Authentication Bypass, взамен простого Port-Security.<br />
+<br />
+Работать все это должно с существующей инфраструктурой. Аутентификация устройств осуществляется на основе учетных записей в AD по протоколу PAP.<br />
+<br />
+Единственное что удалось найти в интернете (в частности на сайте Майкрософт) -- <span class="underline"><a href="http://technet.microsoft.com/en-us/library/dd197535(WS.10).aspx">MAC Address Authorization</a></span> -- статья, следуя которой MAB НЕ построить. А построить его можно так:<br />
+- в настройках NPS добавить к существующей политике метод авторизации PAP;<br />
+<br />
+- прочитать указанную выше статью технета, и убедиться что у вас в реестре НЕТ данных ключей (в статье их рекомендуют создать);<br />
+<br />
+- создать в AD учетки пользователей с именами и паролями соответствующими MAC-адресу устройства (маленькими буквами без разделителей);<br />
+<br />
+- настроить сетевые девайсы например так (не забыв указать RADIUS-сервера в конфиге):<br />
+<br />
+<blockquote>interface FastEthernetXXX<br />
+  description NAP + MAB<br />
+  switchport mode access<br />
+  power inline never<br />
+  authentication order mab dot1x<br />
+  authentication priority dot1x mab<br />
+  authentication port-control auto<br />
+  authentication periodic<br />
+  mab<br />
+  dot1x pae authenticator<br />
+  spanning-tree portfast<br />
+end</blockquote><br />
+Как-то так.

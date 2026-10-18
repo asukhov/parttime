@@ -1,0 +1,84 @@
+---
+title: "KMS Windows 2008 R2 - problems and solutions"
+date: 2011-04-09T19:58:00.000+04:00
+slug: kms-windows-2008-r2-problems-and
+legacy: "https://salttype.blogspot.com/2011/04/kms-windows-2008-r2-problems-and.html"
+comments_count: 0
+---
+
+В далеком 2009 написал заметку по KMS, правда на английском -- бывает сам перечитываю, т.к. есть в ней нечто полезное. Посему дубль на русском:<br />
+<br />
+25 августа 2009 года компания Microsoft опубликовала обновление для операционных систем Windows Server 2008 -- KB968912. Данное обновление позволяет использовать существующие KMS-хосты для активации операционных систем семейства Windows 7 и Windows 2008 R2 (предварительно, разумеется, зарегистрировав на KMS-хостах соответствующие ключи). Аналогичное обновление, под номером KB968915, было также опубликовано 11 августа для операционных систем семейства Windows Server 2003. Данный факт нам нисколько не интересен -- т.к. подходит к концу год 2009;)<br />
+<br />
+Немного теории не вдаваясь в детали лицензирования. Начиная с операционных систем Windows 2008 / Vista компания Microsoft предложила два новых способа активации своих продуктов -- либо используя MAK-ключ, либо посредством KMS-серверов. <br />
+MAK-ключ это ключ который вы получаете например при покупке операционной системы в магазине -- он напечатан у вас на наклейке. Данный сценарий активации предназначен, в основном, для простых пользователей или небольших организаций.<br />
+<br />
+KMS-сервер -- это компьютер под управлением операционной системы Windows 2003 / 2008 / Vista / 7 / 2008 R2, который был активирован с использованием KMS-ключа предназначенного для активации KMS-хостов. Данный сценарий предназначен для организаций -- его мы и рассмотрим. KMS-хост активирует, как не трудно догадаться, KMS-клиентов. KMS-клиенты -- это компьютеры под управлением операционной системы Windows Vista / 2008 / 7 / 2008 R2. Данные компьютеры (KMS-клиенты) не активированны и в них не введен никакой ключ -- ни MAK, ни KMS. Т.е. по умолчанию любой компьютер с только что установленной операционной системой Windows Vista / 2008 / 7 / 2008 R2 является KMS-клиентом.<br />
+<br />
+Тем не менее существует деление среди KMS-ключей. Помимо KMS-ключей предназначенных для активации KMS-хостов существуют KMS-ключи для KMS-клиентов. Соответственно возникает вопрос -- для чего нужны клиентские KMS-ключи, если по умолчанию любой не активированный компьютер уже является KMS-клиентом. Данные ключи в основном используются для перевода KMS-хостов в режим KMS-клиентов. Стоит также отметить что данные ключи не активируют вашу систему. Кроме того для каждого выпуска операционных систем существуют свои ключи -- они распространяются свободно -- на всякий случай я их приведу ниже:<br />
+<br />
+<blockquote>
+Windows Vista Business - YFKBB-PQJJV-G996G-VWGXY-2V3X8<br />
+Windows Vista Business N - HMBQG-8H2RH-C77VX-27R82-VMQBT<br />
+Windows Vista Enterprise - VKK3X-68KWM-X2YGT-QR4M6-4BWMV<br />
+Windows Vista Enterprise N - VTC42-BM838-43QHV-84HX6-XJXKV<br />
+<br />
+Windows Server 2008 Datacenter - 7M67G-PC374-GR742-YH8V4-TCBY3<br />
+Windows Server 2008 Datacenter without Hyper-V - 22XQ2-VRXRG-P8D42-K34TD-G3QQC<br />
+Windows Server 2008 for Itanium-Based Systems - 4DWFP-JF3DJ-B7DTH-78FJB-PDRHK<br />
+Windows Server 2008 Enterprise - YQGMW-MPWTJ-34KDK-48M3W-X4Q6V<br />
+Windows Server 2008 Enterprise without Hyper-V - 39BXF-X8Q23-P2WWT-38T2F-G3FPG<br />
+Windows Server 2008 Standard - TM24T-X9RMF-VWXK6-X8JC9-BFGM2<br />
+Windows Server 2008 Standard without Hyper-V - W7VD6-7JFBR-RX26B-YKQ3Y-6FFFJ<br />
+Windows Web Server 2008 - WYR28-R7TFJ-3X2YQ-YCY4H-M249D<br />
+<br />
+Windows 7 Professional - FJ82H-XT6CR-J8D7P-XQJJ2-GPDD4 <br />
+Windows 7 Professional N - MRPKT-YTG23-K7D7T-X2JMM-QY7MG <br />
+Windows 7 Enterprise - 33PXH-7Y6KF-2VJC9-XBBR8-HVTHH <br />
+Windows 7 Enterprise N - YDRBP-3D83W-TY26F-D46B2-XCKRJ <br />
+Windows 7 Enterprise E - C29WB-22CC8-VJ326-GHFJW-H9DH4<br />
+<br />
+Windows Server 2008 R2 HPC Edition - FKJQ8-TMCVP-FRMR7-4WR42-3JCD7 <br />
+Windows Server 2008 R2 Datacenter - 74YFP-3QFB3-KQT8W-PMXWJ-7M648 <br />
+Windows Server 2008 R2 Enterprise - 489J6-VHDMP-X63PK-3K798-CPX3Y <br />
+Windows Server 2008 R2 for Itanium-Based Systems - GT63C-RJFQ3-4GMB6-BRFB9-CB83V <br />
+Windows Server 2008 R2 Standard - YC6KT-GKW9T-YTKYR-T4X34-R7VHC <br />
+Windows Web Server 2008 R2 - 6TPJF-RBVHG-WBW2R-86QPH-6RTM4 <br />
+<br />
+Windows 8 Professional - NG4HW-VH26C-733KW-K6F98-J8CK4 <br />
+Windows 8 Enterprise - 32JNW-9KQ84-P47T8-D8GGY-CWCK7 <br />
+Windows Server 2012 Core - BN3D2-R7TKB-3YPBD-8DRP2-27GG4 <br />
+Windows Server 2012 Server Standard Full\Core - XC9B7-NBPP2-83J2H-RHMBY-92BT4 <br />
+Windows Server 2012 Datacenter Full\Core - 48HP8-DN98B-MYWDG-T2DCC-8W83P
+<br />
+<br />
+Windows 8.1 Professional - GCRJD-8NW9H-F2CDX-CCM8D-9D6T9 <br />
+Windows 8.1 Enterprise - MHF9N-XY6XB-WVXMC-BTDCT-MKKG7 <br />
+Windows Server 2012 R2 Server Standard - D2N9P-3P6X9-2R39C-7RTCD-MDVJX <br />
+Windows Server 2012 R2 Datacenter - W3GGN-FT8W3-Y4M27-J84CP-Q3VJ9</blockquote>
+<br />
+Перевести KMS-хост в режим KMS-клиента и активировать его на определенном KMS-хосте можно следующим образом (запустив cmd от имени администратора):<br />
+<br />
+<blockquote>
+slmgr /ipk YQGMW-MPWTJ-34KDK-48M3W-X4Q6V<br />
+slmgr /skms srv-kms-01.london.local:1688<br />
+slmgr /ato</blockquote>
+<br />
+Помимо этого KMS-ключи для хостов делятся на классы A, B и C -- по выпускам операционных систем, которые можно активировать данными ключами. <br />
+<br />
+При регистрации в корпоративной сети KMS-хоста в DNS создается SRV-запись указывающая KMS-клиентам куда обращаться за активацией. <br />
+<br />
+Стоит также отметить, что для начала активации KMS-хостом серверов и рабочих станций необходимо, чтобы было достигнуто определенное пороговое значение обращений к данному KMS-хосту -- для начала активации серверов это 5 обращений, для начала активации клиентских операционных систем (Vista / 7) это 25 обращений.<br />
+<br />
+На этом с теорией можно закончить;) Так вот -- 25 августа 2009 года, сразу же после выхода обновления позволяющего существующим в корпоративной сети KMS-хостам на базе операционной системы Windows 2008 Server активировать сервера Windows 2008 Server R2 было принято решение немедленно внедрить данную функциональность.<br />
+<br />
+В принципе никаких проблем на этапе внедрения возникнуть не должно -- в первую очередь необходимо установить обновление, далее ввести ключ KMS-хоста, активировать его и на этом собственно все.<br />
+<br />
+Однако на практике проявилась следующая проблема -- KMS-хост с новым ключом без проблем активировал операционные системы Windows 2008 / Vista, но выдавал сообщения об ошибке при активации операционных систем Windows 2008 R2 / 7.<br />
+<br />
+<blockquote>
+0x80070005 Access is denied: the requested action requires elevated privileges</blockquote>
+<br />
+Далее выяснилось, что данный KMS-хост может активировать Windows 2008 R2 клиентов, но только, если данные клиенты не в домене. Поиск в интернете по всевозможным форумам результата не дал -- похожие проблемы есть, а решения нет. На решение проблемы было потрачено порядка двух рабочих дней -- пришлось погрузится в глубокий дебаг ;)<br />
+<br />
+Первым делом было выяснено, что активация KMS-клиентов слетает при вводе их в домен. Далее была установлена групповая политика, применение которой влечет за собой потерю активации. Методом исключения была найдена настройка групповой политики, приводящая к вышеописанному эффекту -- причем данная проблема появилась ТОЛЬКО у операционных систем Windows 2008 R2 / 7. Проблема заключалась в автоматическом запуске службы Plug and Play. Установив данный параметр групповой политики в значении Not Configured KMS-клиенты начинают активироваться без проблем. Вторым способом решения данной проблемы является предоставление права Read службе Network Services.

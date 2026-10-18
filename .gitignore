@@ -1,0 +1,10 @@
+# generated site
+/site/
+
+# python
+__pycache__/
+*.pyc
+
+# editor noise
+.DS_Store
+*.swp

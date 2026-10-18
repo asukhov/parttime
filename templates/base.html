@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="{{ lang }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ title }}</title>
+<meta name="description" content="{{ description }}">
+{{ meta_urls }}
+<meta property="og:type" content="{{ og_type }}">
+<meta property="og:title" content="{{ title }}">
+<meta property="og:description" content="{{ description }}">
+<meta property="og:site_name" content="{{ site_title }}">
+<meta name="generator" content="parttime-monster (build.py)">
+<link rel="icon" href="{{ favicon }}" type="image/svg+xml">
+<link rel="alternate" type="application/rss+xml" title="{{ site_title }}" href="{{ feed_link }}">
+<link rel="stylesheet" href="{{ prefix }}static/css/fonts.css">
+<link rel="stylesheet" href="{{ prefix }}static/css/style.css">
+{{ head_extra }}
+</head>
+<body class="{{ body_class }}">
+<a class="skip-link" href="#main">skip to main content</a>
+<div class="wrap">
+<header id="header" class="site-header">
+<h1 class="site-title"><a href="{{ home }}">{{ site_title }}</a></h1>
+</header>
+<div class="layout">
+<aside id="sidebar" class="sidebar">
+<nav aria-label="Site links">
+{{ sidebar }}
+</nav>
+</aside>
+<main id="main" class="main">
+{{ content }}
+</main>
+</div>
+<footer class="site-footer">
+<p>{{ footer }}</p>
+</footer>
+</div>
+{{ body_extra }}
+</body>
+</html>
