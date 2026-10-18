@@ -56,9 +56,9 @@ size = 25
 label = "about"
 href = "/posts/wellcome/"
 
-[[sidebar.links]]
-label = "library"
-href = "/posts/2010-01-blog-post_12/"
+# [[sidebar.links]]
+# label = "library"
+# href = "/posts/2010-01-blog-post_12/"
 
 [[sidebar.links]]
 label = "video spot"
@@ -80,10 +80,10 @@ href = "/search/"
 label = "archives"
 href = "/archive/"
 
-[[sidebar.links]]
-label = "rss"
-href = "/feed.xml"
+# [[sidebar.links]]
+# label = "rss"
+# href = "/feed.xml"
 
 [[sidebar.links]]
 label = "mail"
-href = "mailto:asukhov@somewereinthespace.com"
+href = "mailto:0xff5@protonmail.com"
