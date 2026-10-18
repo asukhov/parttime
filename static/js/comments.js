@@ -1,4 +1,4 @@
-/* Anonymous comments — front-end for the optional Cloudflare Worker bridge
+/* Anonymous comments - front-end for the optional Cloudflare Worker bridge
    (site.toml: comments.provider = "cf").
    The worker keeps the thread in a GitHub Discussion and shields writes with
    Cloudflare Turnstile; this file only talks to the worker. */
@@ -41,7 +41,7 @@
 
   function renderThread(comments) {
     if (!comments || !comments.length) {
-      return '<p class="comments-note">Комментариев пока нет — будьте первым.</p>';
+      return '<p class="comments-note">Комментариев пока нет - будьте первым.</p>';
     }
     var items = comments.map(function (c) {
       return (

@@ -1,11 +1,11 @@
-# Parttime Monster — site configuration
+# Parttime Monster - site configuration
 # Everything the generator needs lives here.
 
 [site]
 title = "Salt Type"
-description = "Личные заметки — цитаты, наблюдения, мысли."
+description = "Личные заметки - цитаты, наблюдения, мысли."
 # Optional: full public URL, no trailing slash. Leave empty and the site is
-# completely domain-agnostic — all links are relative, and canonical/og:url
+# completely domain-agnostic - all links are relative, and canonical/og:url
 # plus sitemap.xml are skipped. Set it (e.g. after moving to a custom domain)
 # and they come back.
 url = ""
@@ -19,12 +19,12 @@ posts_per_page = 50
 output = "site"
 
 [comments]
-# "giscus" — comments live as GitHub Discussions on this repository (default;
-#            recommended — see README → Comments for the one-time setup)
-# "cf"     — anonymous comments via the bundled Cloudflare Worker bridge
+# "giscus" - comments live as GitHub Discussions on this repository (default;
+#            recommended - see README → Comments for the one-time setup)
+# "cf"     - anonymous comments via the bundled Cloudflare Worker bridge
 #            (extras/cloudflare-comments/). It uses the same discussion
 #            threads, so you can start with giscus and switch when ready.
-# "none"   — no comments
+# "none"   - no comments
 provider = "giscus"
 
 # --- giscus (provider = "giscus") ---------------------------------------------

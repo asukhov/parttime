@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Parttime Monster — a tiny static HTML5 blog generator.
+"""Parttime Monster - a tiny static HTML5 blog generator.
 
 No dependencies, no framework: Python 3.11+ standard library only.
 Reads content from ./content, templates from ./templates, writes ./site.
@@ -301,7 +301,7 @@ class Builder:
 
         site = config["site"]
         # site_url is optional: when set it is used for canonical/og:url and
-        # sitemap only — every actual link stays relative either way.
+        # sitemap only - every actual link stays relative either way.
         self.site_url = str(site.get("url", "") or "").rstrip("/")
         self.out_root = root / config["build"]["output"]
 
@@ -333,7 +333,7 @@ class Builder:
         return self.prefix + path.lstrip("/")
 
     def canonical(self, path: str) -> str:
-        """Absolute URL for metadata — empty unless [site] url is configured."""
+        """Absolute URL for metadata - empty unless [site] url is configured."""
         return f"{self.site_url}{path}" if self.site_url else ""
 
     def resolve_legacy(self, key: str) -> str:
@@ -349,7 +349,7 @@ class Builder:
         """Render a post/page body for the page currently in context: old
         absolute links resolved to their imported counterparts, /static/
         assets made document-relative, images made clickable (a click opens
-        the image — full size when one is linked — in a new tab)."""
+        the image - full size when one is linked - in a new tab)."""
         fragment = rewrite_internal_links(fragment, self.resolve_legacy)
         fragment = self.resolve_static_assets(fragment)
         return linkify_images(fragment)
@@ -425,7 +425,7 @@ class Builder:
         if provider == "giscus":
             if not c.get("giscus_repo_id") or not c.get("giscus_category_id"):
                 return (
-                    '<div class="comments-note"><p>Comments are not configured yet — '
+                    '<div class="comments-note"><p>Comments are not configured yet - '
                     "add <code>giscus_repo_id</code> and <code>giscus_category_id</code> "
                     "to <code>site.toml</code> (see README → Comments).</p></div>"
                 )
@@ -504,7 +504,7 @@ class Builder:
                body_class: str = "", body_extra: str = "", og_type: str = "website") -> str:
         self.set_ctx(path)
         cfg_site = self.cfg["site"]
-        full_title = cfg_site["title"] if not title else f"{title} — {cfg_site['title']}"
+        full_title = cfg_site["title"] if not title else f"{title} - {cfg_site['title']}"
         meta_urls = ""
         if self.site_url:
             meta_urls = (
@@ -535,7 +535,7 @@ class Builder:
         site = self.cfg["site"]
         year = dt.date.today().year
         since = site.get("copyright_since")
-        span = f"{since}–{year}" if since and int(since) < year else str(year)
+        span = f"{since}-{year}" if since and int(since) < year else str(year)
         feed = f'<a href="{e(self.href("/feed.xml"))}">rss</a>'
         return f'© {span} {e(site.get("author", ""))} · {feed}'
 
@@ -682,7 +682,7 @@ class Builder:
         )
         body = (
             '<article class="search"><h2 class="page-title">Search</h2>'
-            '<p class="search-hint">Поиск по заметкам. Начните печатать — результаты '
+            '<p class="search-hint">Поиск по заметкам. Начните печатать - результаты '
             "появляются сразу, всё считается в браузере.</p>"
             '<p><input type="search" id="q" class="search-input" '
             'placeholder="search…" autofocus aria-label="Search" /></p>'
@@ -723,7 +723,7 @@ class Builder:
             )
         latest = self.posts[0].date if self.posts and self.posts[0].date else dt.datetime.now(dt.timezone.utc)
         # RSS wants an absolute channel link; without a configured url we emit
-        # a relative one (".") — readers resolve it against the feed location.
+        # a relative one (".") - readers resolve it against the feed location.
         channel_link = f"{self.site_url}/" if self.site_url else "."
         xml = (
             '<?xml version="1.0" encoding="UTF-8"?>\n'
@@ -832,7 +832,7 @@ class Builder:
             warnings.append("comments: cf_api is empty (see extras/cloudflare-comments/README.md).")
         print(f"built {len(self.posts)} posts, {len(self.pages)} pages -> {self.out_root}")
         if not self.site_url:
-            print("note: [site] url is empty — all links are relative; "
+            print("note: [site] url is empty - all links are relative; "
                   "canonical/og:url and sitemap.xml are skipped.")
         for w in warnings:
             print(f"warning: {w}")

@@ -8,7 +8,7 @@ compatibility_date = "2026-06-01"
 [vars]
 GH_OWNER = "asukhov"
 GH_REPO = "test"
-# Discussions category id — see README.md, step 3
+# Discussions category id - see README.md, step 3
 GH_CATEGORY_ID = ""
 # Origins allowed to write comments (the blog itself + local preview).
 # "*" disables the check (not recommended for the write endpoint).

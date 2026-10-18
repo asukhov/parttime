@@ -1,5 +1,5 @@
 /**
- * parttime-monster-comments — an anonymous comment bridge for a static blog.
+ * parttime-monster-comments - an anonymous comment bridge for a static blog.
  *
  * Idea: the blog stays 100% static (GitHub Pages), comments live in GitHub
  * Discussions, and this worker is the only moving part. It is stateless:
@@ -12,7 +12,7 @@
  *   -> trivial spam heuristics -> addDiscussionComment (or createDiscussion)
  *
  * Because discussions are titled with the page path, the very same threads
- * are served by giscus too — you can switch providers in site.toml without
+ * are served by giscus too - you can switch providers in site.toml without
  * losing a single comment.
  *
  * Secrets/vars (see README.md next to this file):
@@ -110,7 +110,7 @@ function normalizeComment(node) {
   return { id: node.id, created: node.createdAt, author, body };
 }
 
-/* the worker stores "**name**\n\ntext" — this splits it back apart */
+/* the worker stores "**name**\n\ntext" - this splits it back apart */
 function splitAuthor(body) {
   const m = body.match(/^\*\*(.+?)\*\*\s*\n+([\s\S]*)$/);
   if (m) return { author: m[1].trim(), body: m[2].trim() };
@@ -150,7 +150,7 @@ async function postComment(request, env) {
 
   const ip = request.headers.get("cf-connecting-ip") || "";
   if (await rateLimited(ip, env)) {
-    return json({ error: "slow down — one comment per minute" }, 429, cors(request, env));
+    return json({ error: "slow down - one comment per minute" }, 429, cors(request, env));
   }
 
   const discussion = await findDiscussion(page, env);

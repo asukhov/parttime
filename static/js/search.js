@@ -1,4 +1,4 @@
-/* Client-side search over /searchindex.json — a few hundred posts scan
+/* Client-side search over /searchindex.json - a few hundred posts scan
    instantly, no server and no dependencies required. */
 (function () {
   "use strict";
