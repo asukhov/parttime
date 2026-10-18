@@ -2,7 +2,7 @@
 # Everything the generator needs lives here.
 
 [site]
-title = "Parttime Monster"
+title = "Salt Type"
 description = "Личные заметки — цитаты, наблюдения, мысли."
 # Optional: full public URL, no trailing slash. Leave empty and the site is
 # completely domain-agnostic — all links are relative, and canonical/og:url
@@ -10,7 +10,7 @@ description = "Личные заметки — цитаты, наблюдени�
 # and they come back.
 url = ""
 lang = "ru"
-author = "Alexandr Sukhov"
+author = "Aleksandr Sukhov"
 copyright_since = 2009
 posts_per_page = 50
 
